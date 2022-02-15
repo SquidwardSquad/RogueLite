@@ -8,6 +8,7 @@
 #include <SFML/System.hpp>
 
 #include "player.h"
+#include "wall.h"
 
 class Game
 {
@@ -16,6 +17,7 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 	Player player;
+	Wall wall;
 
 public:
 	Game();

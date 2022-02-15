@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 class Player
 {
@@ -16,13 +17,41 @@ private:
 	sprite.setTexture(texture);
 	*/
 
-	sf::RectangleShape pSprite;
+	
+
+	
+	bool isColliding = false;
+
+	
+
+
 	
 public:
 	Player();
 	~Player();
 
+
+	sf::RectangleShape pSprite;
+	const int maxVel = 4;
+	sf::FloatRect boundingBox;
+
+	sf::Vector2f pos;
+
+	enum class Facing
+	{
+		UP = 0,
+		LEFT,
+		RIGHT,
+		DOWN
+	};
+
+	int speed;
+
+	Facing dir;
+
+
 	sf::RectangleShape getPlayerSprite() const;
+	void move();
 
 };
 
