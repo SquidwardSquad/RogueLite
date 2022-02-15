@@ -10,6 +10,8 @@
 #include "player.h"
 #include "wall.h"
 
+#include <vector>
+
 class Game
 {
 private:
@@ -17,7 +19,12 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 	Player player;
-	Wall wall;
+
+	bool isColliding;
+	
+
+	Wall* walls[8];
+
 
 public:
 	Game();

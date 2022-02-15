@@ -142,12 +142,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\wall.h" />

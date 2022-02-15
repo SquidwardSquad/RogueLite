@@ -1,12 +1,20 @@
 #include "wall.h"
 
-Wall::Wall()
+#include <iostream>
+
+Wall::Wall(float xPos, float yPos)
 {
-	wSprite.setSize(sf::Vector2f(100.f, 100.f));
-	wSprite.setFillColor(sf::Color::Red);
-	wSprite.setOrigin(sf::Vector2f(50.f, 50.f));
-	wSprite.setPosition(sf::Vector2f(50.f, 50.f));
-	boundingBox = wSprite.getGlobalBounds();
+	if (!texture.loadFromFile("assets/wall.png"))
+	{
+		std::cout << "Wall texture improperly loaded..." << std::endl;
+	}
+
+	//DONT QUESTION THE STUPID SCALING
+	sprite.setTexture(texture);
+	sprite.setOrigin(sf::Vector2f(25.f, 25.f));
+	sprite.setScale(sf::Vector2f(2.f, 2.f));
+	sprite.setPosition(sf::Vector2f(xPos, yPos));
+	collisionBox = sprite.getGlobalBounds();
 
 }
 
@@ -15,7 +23,3 @@ Wall::~Wall()
 
 }
 
-sf::RectangleShape Wall::getWallSprite() const
-{
-	return wSprite;
-}

@@ -6,26 +6,21 @@
 
 class Entity
 {
-private:
+protected:
 
-sf::Texture texture;
-/*
-if (!texture.loadFromFile("image.png"))
-{
-    
-}
-*/
+	sf::Texture texture;
 
-sf::Vector2f pos;
+
+	sf::Vector2f pos;
 
 
 public:
 
-Entity();
-~Entity();
+	Entity();
+	virtual ~Entity();
 
-sf::Sprite sprite;
-sf::FloatRect collisionBox;
+	sf::Sprite sprite;
+	sf::FloatRect collisionBox;
 
 
 

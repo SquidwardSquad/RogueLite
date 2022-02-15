@@ -11,6 +11,15 @@ Game::Game():
 	videoMode.height = 600;
 	window = new sf::RenderWindow(videoMode, "RogueLite", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
+
+    int j = 0;
+    for (int i = 50; i < 800; i += 100)
+    {
+        Wall* temp = new Wall(i, 50.f);
+        walls[j++] = temp;
+    }
+
+    isColliding = false;
 }
 
 Game::~Game()
@@ -45,32 +54,38 @@ void Game::update()
     }
 
 	player.boundingBox = player.getPlayerSprite().getGlobalBounds();
-    if (player.boundingBox.intersects(wall.boundingBox))
+    for (int i = 0; i < 8; i++)
     {
-        switch (player.dir)
+        if (player.boundingBox.intersects(walls[i]->collisionBox))
         {
-        case Player::Facing::UP:
-            player.pSprite.move(sf::Vector2f(0, 4));
-            break;
+            switch (player.dir)
+            {
+            case Player::Facing::UP:
+                player.pSprite.move(sf::Vector2f(0, 4));
+                break;
 
-        case Player::Facing::DOWN:
-            player.pSprite.move(sf::Vector2f(0, -4));
-            break;
+            case Player::Facing::DOWN:
+                player.pSprite.move(sf::Vector2f(0, -4));
+                break;
 
-        case Player::Facing::LEFT:
-            player.pSprite.move(sf::Vector2f(4, 0));
-            break;
+            case Player::Facing::LEFT:
+                player.pSprite.move(sf::Vector2f(4, 0));
+                break;
 
-        case Player::Facing::RIGHT:
-            player.pSprite.move(sf::Vector2f(-4, 0));
-            break;
+            case Player::Facing::RIGHT:
+                player.pSprite.move(sf::Vector2f(-4, 0));
+                break;
+            }
+            isColliding = true;
         }
+        
     }
-    else
+
+    if (!isColliding)
     {
         player.move();
     }
-	
+    isColliding = false;
 	
 }
 void Game::render()
@@ -79,8 +94,16 @@ void Game::render()
 
     //Draw objects here
 	
+    for (int i = 0; i < 8; i++)
+    {
+        window->draw(walls[i]->sprite);
+    }
+
+
+
     window->draw(player.getPlayerSprite());
-    window->draw(wall.getWallSprite());
+
+    
 
     window->display();
 }

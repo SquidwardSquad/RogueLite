@@ -1,12 +1,16 @@
 #include "entity.h"
 
+#include <iostream>
+
 Entity::Entity()
-{
-  sprite.setTexture(texture);
-  sprite.setSize(sf::Vector2f(50.f, 50.f));
-  sprite.setOrigin(sf::Vector2f(25.f, 25.f));
-	sprite.setPosition(sf::Vector2f(400.f, 300.f));
-	collisionBox = sprite.getGlobalBounds();
+{	
+	//if (!texture.loadFromFile("assets/default.png"))
+	//{
+		//std::cout << "Entity texture improperly loaded..." << std::endl;
+	//}
+	
+	//sprite.setTexture(texture);
+	//collisionBox = sprite.getGlobalBounds();
 
   
 }
