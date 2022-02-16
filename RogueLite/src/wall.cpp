@@ -11,11 +11,12 @@ Wall::Wall(float xPos, float yPos)
 
 	//DONT QUESTION THE STUPID SCALING
 	sprite.setTexture(texture);
+	texture.setSmooth(false);
 	sprite.setOrigin(sf::Vector2f(25.f, 25.f));
-	sprite.setScale(sf::Vector2f(2.f, 2.f));
+	//sprite.setScale(sf::Vector2f(2.f, 2.f));
 	sprite.setPosition(sf::Vector2f(xPos, yPos));
 	collisionBox = sprite.getGlobalBounds();
-
+	
 }
 
 Wall::~Wall()

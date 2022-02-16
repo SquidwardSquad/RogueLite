@@ -7,32 +7,17 @@
 class Player
 {
 private:
-	/*
-	sf::Texture texture;
-	if (!texture.loadFromFile("image.png"), sf::IntRect(0, 0, 0, 0))
-	{
-		// error...
-	}
-	sf::Sprite sprite;
-	sprite.setTexture(texture);
-	*/
-
-	
-
 	
 	bool isColliding = false;
-
+	sf::Texture texture;
 	
-
-
-	
+	int speed;
 public:
 	Player();
 	~Player();
 
 
-	sf::RectangleShape pSprite;
-	const int maxVel = 4;
+	sf::Sprite sprite;
 	sf::FloatRect boundingBox;
 
 	sf::Vector2f pos;
@@ -45,12 +30,12 @@ public:
 		DOWN
 	};
 
-	int speed;
+	
 
 	Facing dir;
 
 
-	sf::RectangleShape getPlayerSprite() const;
+	//sf::RectangleShape getPlayerSprite() const;
 	void move();
 
 };

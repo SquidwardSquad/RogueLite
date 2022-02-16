@@ -23,7 +23,7 @@ private:
 	bool isColliding;
 	
 
-	Wall* walls[8];
+	Wall* walls[56];
 
 
 public:

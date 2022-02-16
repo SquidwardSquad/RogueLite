@@ -12,10 +12,32 @@ Game::Game():
 	window = new sf::RenderWindow(videoMode, "RogueLite", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 
+    //top row
     int j = 0;
-    for (int i = 50; i < 800; i += 100)
+    for (int i = 25; i < 800; i += 50)
     {
-        Wall* temp = new Wall(i, 50.f);
+        Wall* temp = new Wall(i, 25.f);
+        walls[j++] = temp;
+    }
+    
+    //bottom row
+    for (int i = 25; i < 800; i += 50)
+    {
+       Wall* temp = new Wall(i, 575.f);
+       walls[j++] = temp;
+    }
+
+    //left column
+    for (int i = 25; i < 600; i += 50)
+    {
+        Wall* temp = new Wall(25.f, i);
+        walls[j++] = temp;
+    }
+
+    //right column
+    for (int i = 25; i < 600; i += 50)
+    {
+        Wall* temp = new Wall(775.f, i);
         walls[j++] = temp;
     }
 
@@ -24,7 +46,11 @@ Game::Game():
 
 Game::~Game()
 {
-	delete window;
+    for(int i = 0; i < 56; i++)
+    {
+        delete walls[i];
+    }
+    delete window;
 }
 
 const bool Game::isRunning() const
@@ -53,27 +79,27 @@ void Game::update()
         }
     }
 
-	player.boundingBox = player.getPlayerSprite().getGlobalBounds();
-    for (int i = 0; i < 8; i++)
+	player.boundingBox = player.sprite.getGlobalBounds();
+    for (int i = 0; i < 56; i++)
     {
         if (player.boundingBox.intersects(walls[i]->collisionBox))
         {
             switch (player.dir)
             {
             case Player::Facing::UP:
-                player.pSprite.move(sf::Vector2f(0, 4));
+                player.sprite.move(sf::Vector2f(0, 0.5f));
                 break;
 
             case Player::Facing::DOWN:
-                player.pSprite.move(sf::Vector2f(0, -4));
+                player.sprite.move(sf::Vector2f(0, -0.5f));
                 break;
 
             case Player::Facing::LEFT:
-                player.pSprite.move(sf::Vector2f(4, 0));
+                player.sprite.move(sf::Vector2f(0.5f, 0));
                 break;
 
             case Player::Facing::RIGHT:
-                player.pSprite.move(sf::Vector2f(-4, 0));
+                player.sprite.move(sf::Vector2f(-0.5f, 0));
                 break;
             }
             isColliding = true;
@@ -94,14 +120,14 @@ void Game::render()
 
     //Draw objects here
 	
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 56; i++)
     {
         window->draw(walls[i]->sprite);
     }
 
 
 
-    window->draw(player.getPlayerSprite());
+    window->draw(player.sprite);
 
     
 
