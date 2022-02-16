@@ -147,12 +147,14 @@
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\wall.cpp" />
+    <ClCompile Include="src\weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\wall.h" />
+    <ClInclude Include="src\weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,30 +7,27 @@ Player::Player()
 	{
 		std::cout << "Player texture improperly loaded..." << std::endl;
 	}
-	sprite.setTexture(texture);
 	texture.setSmooth(false);
+
+	sprite.setTexture(texture);
 	sprite.setOrigin(sf::Vector2f(8.f, 8.f));
-	sprite.setScale(sf::Vector2f(4.f, 4.f));
+	sprite.setScale(sf::Vector2f(2.f, 2.f));
 	
 	sprite.setPosition(sf::Vector2f(200.f, 200.f));
 	boundingBox = sprite.getGlobalBounds();
 	speed = 4;
 	dir = Facing::UP;
+
+	weapon = nullptr;
+	isAttacking = false;
 	
 
 }
 
 Player::~Player()
 {
-
+	delete weapon;
 }
-
-/*
-sf::RectangleShape Player::getPlayerSprite() const
-{
-	return pSprite;
-}
-*/
 
 void Player::move()
 {
@@ -59,6 +56,31 @@ void Player::move()
 		dir = Facing::RIGHT;
 	}
 	
+}
+
+void Player::attack()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		equipWeapon();
+		isAttacking = true;
+	}
+	else
+	{
+		isAttacking = false;
+		unequipWeapon();
+	}
+}
+
+void Player::equipWeapon()
+{
+	weapon = new Weapon((int)dir, pos.x, pos.y);
+}
+
+void Player::unequipWeapon()
+{
+	delete weapon;
+	weapon = nullptr;
 }
 
 

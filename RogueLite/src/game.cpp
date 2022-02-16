@@ -6,13 +6,21 @@ Game::Game():
     event(), //So visual studio can stop being pissy
     player()
 {
-    
+    //Creates Window
 	videoMode.width = 800;
 	videoMode.height = 600;
 	window = new sf::RenderWindow(videoMode, "RogueLite", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 
-    //top row
+    //Plays Music
+    if (!music.openFromFile("assets/Tribal_Ritual.wav"))
+    {
+        std::cout << "Music improperly loaded..." << std::endl;
+    }
+    music.play();
+    music.setLoop(true);
+
+    //Top wall row
     int j = 0;
     for (int i = 25; i < 800; i += 50)
     {
@@ -20,21 +28,21 @@ Game::Game():
         walls[j++] = temp;
     }
     
-    //bottom row
+    //Bottom wall row
     for (int i = 25; i < 800; i += 50)
     {
        Wall* temp = new Wall(i, 575.f);
        walls[j++] = temp;
     }
 
-    //left column
+    //Left wall column
     for (int i = 25; i < 600; i += 50)
     {
         Wall* temp = new Wall(25.f, i);
         walls[j++] = temp;
     }
 
-    //right column
+    //Right wall column
     for (int i = 25; i < 600; i += 50)
     {
         Wall* temp = new Wall(775.f, i);
@@ -42,16 +50,20 @@ Game::Game():
     }
 
     isColliding = false;
+    
 }
 
 Game::~Game()
 {
+    //Deletes all perimeter walls when closed
     for(int i = 0; i < 56; i++)
     {
         delete walls[i];
     }
     delete window;
 }
+
+
 
 const bool Game::isRunning() const
 {
@@ -60,6 +72,7 @@ const bool Game::isRunning() const
 
 void Game::update()
 {
+
     while (window->pollEvent(event))
     {
 
@@ -74,7 +87,21 @@ void Game::update()
 			{
 				window->close();
 			}
+            //if (event.key.code == sf::Keyboard::Space)
+           // {
+
+              // player.equipWeapon();
+               // player.isAttacking = true;
+                
+          //  }
             break;
+            
+        //case sf::Event::KeyReleased:
+           // if (event.key.code == sf::Keyboard::Space)
+           // {
+              //  player.isAttacking = false;
+              //  player.unequipWeapon();
+          //  }
 
         }
     }
@@ -107,13 +134,38 @@ void Game::update()
         
     }
 
+    //Also checks if player is attacking
+    
+   player.attack();
+
     if (!isColliding)
     {
         player.move();
     }
     isColliding = false;
+
+
 	
 }
+
+/*
+void Game::isAttackTime()
+{
+    clock.restart();
+    while (window->isOpen())
+    {
+        if (clock.getElapsedTime() >= sf::seconds(4.f))
+        {
+            clock.restart();
+            player.isAttacking = true;
+            while (clock.getElapsedTime() >= sf::seconds(1.f)){} //Waits one second
+            player.isAttacking = false;
+            clock.restart();
+        }
+    }
+}
+*/
+
 void Game::render()
 {
     window->clear(sf::Color(0, 0, 0));
@@ -128,7 +180,10 @@ void Game::render()
 
 
     window->draw(player.sprite);
-
+    if (player.isAttacking)
+    {
+        window->draw(player.weapon->sprite);
+    }
     
 
     window->display();

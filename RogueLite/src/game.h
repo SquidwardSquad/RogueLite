@@ -10,30 +10,35 @@
 #include "player.h"
 #include "wall.h"
 
-#include <vector>
+#include <thread>
 
 class Game
 {
 private:
-	sf::RenderWindow* window = nullptr;
 	sf::VideoMode videoMode;
+	sf::RenderWindow* window = nullptr;
+
 	sf::Event event;
+
+	sf::Music music;
+
 	Player player;
 
-	bool isColliding;
 	
-
 	Wall* walls[56];
 
+	bool isColliding; // Move to player class
+	
 
 public:
 	Game();
 	~Game();
 
 	const bool isRunning() const;
-
 	void update();
 	void render();
+	void isAttackTime();
+	
 };
 
 #endif

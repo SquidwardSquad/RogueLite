@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include "weapon.h"
+
 class Player
 {
 private:
@@ -12,6 +14,10 @@ private:
 	sf::Texture texture;
 	
 	int speed;
+
+	void equipWeapon();
+	void unequipWeapon();
+
 public:
 	Player();
 	~Player();
@@ -19,8 +25,11 @@ public:
 
 	sf::Sprite sprite;
 	sf::FloatRect boundingBox;
-
 	sf::Vector2f pos;
+
+	
+
+	Weapon* weapon;
 
 	enum class Facing
 	{
@@ -33,10 +42,12 @@ public:
 	
 
 	Facing dir;
+	bool isAttacking;
 
-
-	//sf::RectangleShape getPlayerSprite() const;
 	void move();
+	void attack();
+	
+	
 
 };
 
