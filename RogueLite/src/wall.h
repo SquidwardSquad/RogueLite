@@ -1,10 +1,8 @@
 #ifndef WALL_H
 #define WALL_H
 
+//Inherited Class
 #include "entity.h"
-
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 
 class Wall : public Entity
 {
@@ -13,6 +11,5 @@ private:
 public:
 	Wall(float xPos, float yPos);
 	~Wall();
-	
 };
-#endif
+#endif //WALL_H

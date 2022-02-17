@@ -1,35 +1,22 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
+//Inherited Class
+#include "entity.h"
 
 #include "weapon.h"
 
-class Player
+class Player : public Entity
 {
 private:
 	
-	bool isColliding = false;
-	sf::Texture texture;
-	
-	int speed;
+	float speed;
+	bool isAttacking;
 
 	void equipWeapon();
 	void unequipWeapon();
 
 public:
-	Player();
-	~Player();
-
-
-	sf::Sprite sprite;
-	sf::FloatRect boundingBox;
-	sf::Vector2f pos;
-
-	
-
-	Weapon* weapon;
 
 	enum class Facing
 	{
@@ -39,16 +26,18 @@ public:
 		DOWN
 	};
 
-	
-
 	Facing dir;
-	bool isAttacking;
+	
+	Weapon* weapon;
+
+	Player();
+	~Player();
+
+	bool checkIfAttacking() const;
+	void alterCollision(bool isColliding);
 
 	void move();
 	void attack();
-	
-	
-
 };
 
-#endif
+#endif //PLAYER_H

@@ -3,7 +3,7 @@
 #include <iostream>
 
 Game::Game():
-    event(), //So visual studio can stop being pissy
+    event(), 
     player()
 {
     //Creates Window
@@ -20,42 +20,39 @@ Game::Game():
     music.play();
     music.setLoop(true);
 
-    //Top wall row
+    //Top Wall Row
     int j = 0;
     for (int i = 25; i < 800; i += 50)
     {
-        Wall* temp = new Wall(i, 25.f);
+        Wall* temp = new Wall((float)i, 25.f);
         walls[j++] = temp;
     }
     
-    //Bottom wall row
+    //Bottom Wall Row
     for (int i = 25; i < 800; i += 50)
     {
-       Wall* temp = new Wall(i, 575.f);
+       Wall* temp = new Wall((float)i, 575.f);
        walls[j++] = temp;
     }
 
-    //Left wall column
+    //Left Wall Column
     for (int i = 25; i < 600; i += 50)
     {
-        Wall* temp = new Wall(25.f, i);
+        Wall* temp = new Wall(25.f, (float)i);
         walls[j++] = temp;
     }
 
-    //Right wall column
+    //Right Wall Column
     for (int i = 25; i < 600; i += 50)
     {
-        Wall* temp = new Wall(775.f, i);
+        Wall* temp = new Wall(775.f, (float)i);
         walls[j++] = temp;
-    }
-
-    isColliding = false;
-    
+    } 
 }
 
 Game::~Game()
 {
-    //Deletes all perimeter walls when closed
+    //Deletes All Perimeter Walls If Closed
     for(int i = 0; i < 56; i++)
     {
         delete walls[i];
@@ -63,16 +60,14 @@ Game::~Game()
     delete window;
 }
 
-
-
-const bool Game::isRunning() const
+bool Game::isRunning() const
 {
 	return window->isOpen();
 }
 
 void Game::update()
 {
-
+    //Polls Windows Events
     while (window->pollEvent(event))
     {
 
@@ -87,104 +82,70 @@ void Game::update()
 			{
 				window->close();
 			}
-            //if (event.key.code == sf::Keyboard::Space)
-           // {
-
-              // player.equipWeapon();
-               // player.isAttacking = true;
-                
-          //  }
             break;
-            
-        //case sf::Event::KeyReleased:
-           // if (event.key.code == sf::Keyboard::Space)
-           // {
-              //  player.isAttacking = false;
-              //  player.unequipWeapon();
-          //  }
-
         }
     }
 
-	player.boundingBox = player.sprite.getGlobalBounds();
+    //Checks If Player Collides With Walls
+	player.collisionBox = player.sprite.getGlobalBounds();
     for (int i = 0; i < 56; i++)
     {
-        if (player.boundingBox.intersects(walls[i]->collisionBox))
+        if (player.collisionBox.intersects(walls[i]->collisionBox))
         {
             switch (player.dir)
             {
             case Player::Facing::UP:
-                player.sprite.move(sf::Vector2f(0, 0.5f));
-                break;
-
-            case Player::Facing::DOWN:
-                player.sprite.move(sf::Vector2f(0, -0.5f));
+                player.sprite.move(sf::Vector2f(0.f, 0.5f));
                 break;
 
             case Player::Facing::LEFT:
-                player.sprite.move(sf::Vector2f(0.5f, 0));
+                player.sprite.move(sf::Vector2f(0.5f, 0.f));
                 break;
 
             case Player::Facing::RIGHT:
-                player.sprite.move(sf::Vector2f(-0.5f, 0));
+                player.sprite.move(sf::Vector2f(-0.5f, 0.f));
+                break;
+           
+            case Player::Facing::DOWN:
+                player.sprite.move(sf::Vector2f(0.f, -0.5f));
                 break;
             }
-            isColliding = true;
+            player.alterCollision(true);
         }
         
     }
 
-    //Also checks if player is attacking
-    
-   player.attack();
+    //Also Checks If Player Is Attacking
+    player.attack();
 
-    if (!isColliding)
+    //Moves Player If Not Colliding
+    if (!player.checkIfColliding())
     {
         player.move();
     }
-    isColliding = false;
-
-
-	
+    player.alterCollision(false);
 }
-
-/*
-void Game::isAttackTime()
-{
-    clock.restart();
-    while (window->isOpen())
-    {
-        if (clock.getElapsedTime() >= sf::seconds(4.f))
-        {
-            clock.restart();
-            player.isAttacking = true;
-            while (clock.getElapsedTime() >= sf::seconds(1.f)){} //Waits one second
-            player.isAttacking = false;
-            clock.restart();
-        }
-    }
-}
-*/
 
 void Game::render()
 {
+    //Clears Window
     window->clear(sf::Color(0, 0, 0));
 
-    //Draw objects here
+    //Drawing Entities
 	
     for (int i = 0; i < 56; i++)
     {
         window->draw(walls[i]->sprite);
     }
 
-
-
     window->draw(player.sprite);
-    if (player.isAttacking)
+    if (player.checkIfAttacking())
     {
         window->draw(player.weapon->sprite);
     }
     
+    //Stop Drawing Entities
 
+    //Draws To Window
     window->display();
 }

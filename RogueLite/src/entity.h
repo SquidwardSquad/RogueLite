@@ -1,30 +1,28 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 
 class Entity
 {
 protected:
 
+	bool isColliding;
+	
 	sf::Texture texture;
-
-
 	sf::Vector2f pos;
 
-
 public:
-
-	Entity();
-	virtual ~Entity();
 
 	sf::Sprite sprite;
 	sf::FloatRect collisionBox;
 
+	Entity();
+	virtual ~Entity();
 
-
+	bool checkIfColliding() const;
+	sf::Vector2f getPos();
 };
 
-
-#endif  //ENTITY_H
+#endif //ENTITY_H

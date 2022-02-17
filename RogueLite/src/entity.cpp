@@ -3,19 +3,20 @@
 #include <iostream>
 
 Entity::Entity()
-{	
-	//if (!texture.loadFromFile("assets/default.png"))
-	//{
-		//std::cout << "Entity texture improperly loaded..." << std::endl;
-	//}
-	
-	//sprite.setTexture(texture);
-	//collisionBox = sprite.getGlobalBounds();
-
-  
+{	 
+	isColliding = false;
 }
 
 Entity::~Entity()
 {
-  
+}
+
+bool Entity::checkIfColliding() const
+{
+	return isColliding;
+}
+
+sf::Vector2f Entity::getPos()
+{
+	return pos;
 }
