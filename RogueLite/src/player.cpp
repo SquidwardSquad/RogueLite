@@ -60,19 +60,19 @@ void Player::move()
 		sprite.setPosition(pos + sf::Vector2f(0.f, -speed));
 		dir = Facing::UP;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(-speed, 0.f));
 		dir = Facing::LEFT;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(speed, 0.f));
 		dir = Facing::RIGHT;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(0.f, speed));

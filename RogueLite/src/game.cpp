@@ -19,6 +19,7 @@ Game::Game():
     }
     music.play();
     music.setLoop(true);
+    music.setVolume(10.f);
 
     //Top Wall Row
     int j = 0;
@@ -48,12 +49,26 @@ Game::Game():
         Wall* temp = new Wall(775.f, (float)i);
         walls[j++] = temp;
     } 
+
+    //Temp Enemy Creation
+    for (int i = 0; i < 6; i++)
+    {
+        Enemy* temp = new Enemy(415, 315);
+        enemies[i] = temp;
+        enemies[i]->collision = false;
+    }
 }
 
 Game::~Game()
 {
+    //Deletes All Remaining Enemies
+    for (int i = 0; i < 6; i++)
+    {
+        delete enemies[i];
+    }
+
     //Deletes All Perimeter Walls If Closed
-    for(int i = 0; i < 56; i++)
+    for (int i = 0; i < 56; i++)
     {
         delete walls[i];
     }
@@ -115,6 +130,23 @@ void Game::update()
         
     }
 
+    //Checks If Enemies Collide With Walls
+    for (int i = 0; i < 6; i++)
+    { 
+    enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
+        for (int j = 0; j < 56; j++)
+        {
+            if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
+            {
+                enemies[i]->collision = true;
+                if (enemies[i]->collision == true)
+                {
+                    enemies[i]->speed += -1;
+                }
+            }
+        }
+    }
+
     //Also Checks If Player Is Attacking
     player.attack();
 
@@ -124,12 +156,19 @@ void Game::update()
         player.move();
     }
     player.alterCollision(false);
+
+    for (int i = 0; i < 6; i++)
+    {
+        enemies[i]->move();
+        enemies[i]->collision = false;
+    }
+
 }
 
 void Game::render()
 {
     //Clears Window
-    window->clear(sf::Color(0, 0, 0));
+    window->clear(sf::Color(6, 54, 17));
 
     //Drawing Entities
 	
@@ -142,6 +181,11 @@ void Game::render()
     if (player.checkIfAttacking())
     {
         window->draw(player.weapon->sprite);
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        window->draw(enemies[i]->sprite);
     }
     
     //Stop Drawing Entities

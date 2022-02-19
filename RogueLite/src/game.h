@@ -9,6 +9,7 @@
 
 #include "player.h"
 #include "wall.h"
+#include "enemy.h"
 
 class Game
 {
@@ -21,6 +22,7 @@ private:
 
 	Player player;
 	Wall* walls[56];
+	Enemy* enemies[6];
 	
 public:
 
