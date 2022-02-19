@@ -22,7 +22,9 @@ private:
 
 	Player player;
 	Wall* walls[56];
-	Enemy* enemies[6];
+	Enemy* enemies[5];
+
+	double diffScale;
 	
 public:
 

@@ -50,21 +50,24 @@ Game::Game():
         walls[j++] = temp;
     } 
 
-    //Temp Enemy Creation
-    for (int i = 0; i < 6; i++)
+    j = 0;
+    //Initial Enemy Creation
+    for (int i = 100; i < 600; i += 100)
     {
-        Enemy* temp = new Enemy(200, 200);
-        enemies[i] = temp;
-        
+        Enemy* temp = new Enemy(100, i);
+        enemies[j] = temp;
+        j++;
     }
+
+    diffScale = 1;
 }
 
 Game::~Game()
 {
     //Deletes All Remaining Enemies
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
-        if (enemies[i] != nullptr)
+        if (enemies[i]->isAlive)
         { 
             delete enemies[i];
         }
@@ -104,6 +107,32 @@ void Game::update()
         }
     }
 
+    //Checks If Enemies Are Alive, And Spawns New Ones
+    int j = 0;
+    for (int i = 0; i < 5; i++)
+    {
+        if (!enemies[i]->isAlive)
+        {
+            j++;
+        }
+        if (j == 5)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                delete enemies[i];
+                enemies[i] = nullptr;
+            }
+            j = 0;
+            for (int i = 100; i < 600; i += 100)
+            {
+                Enemy* temp = new Enemy(100, i, diffScale);
+                enemies[j] = temp;
+                j++;
+            }
+            diffScale += 0.5;
+        }
+    }
+
     //Checks If Player Collides With Walls
     if (player.isAlive)
     {
@@ -136,29 +165,8 @@ void Game::update()
         }
     }
 
-    //Checks If Enemies Collide With Walls
-    for (int i = 0; i < 6; i++)
-    {
-        if (enemies[i]->isAlive == true)
-        { 
-            enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
-            for (int j = 0; j < 56; j++)
-            {
-                if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
-                {
-                    if (enemies[i]->collision == false)
-                    {
-                        enemies[i]->speed = -4;
-                        enemies[i]->collision = true;
-                    }
-                }
-                
-            }
-        }
-    }
-
     //Checks If Enemies Attacked Player (Ends Game)
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
         if (enemies[i]->isAlive && player.isAlive)
         {
@@ -177,7 +185,7 @@ void Game::update()
     //Checks If Enemies Get Hit
     if (player.isAttacking)
     { 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (enemies[i]->isAlive)
             {
@@ -189,6 +197,22 @@ void Game::update()
                         enemies[i]->isAlive = false;
                     }
                 }
+            }
+        }
+    }
+
+    //Move Enemies Back and Forth
+    for (int i = 0; i < 5; i++)
+    {
+        if (enemies[i]->isAlive)
+        {
+            if (enemies[i]->getPos().x > 700)
+            {
+                enemies[i]->speed = (float)(-4.f * diffScale);
+            }
+            if (enemies[i]->getPos().x < 100)
+            {
+                enemies[i]->speed = (float)(4.f * diffScale);
             }
         }
     }
@@ -206,35 +230,10 @@ void Game::update()
 
 
     //Moves Enemy
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
-        if (enemies[i]->collision == false)
-            enemies[i]->move();
-        else
-            enemies[i]->oppMove();
+        enemies[i]->move();
     }
-
-    //Checks If Enemies Collide With Walls
-    for (int i = 0; i < 6; i++)
-    {
-        if (enemies[i]->isAlive == true)
-        {
-            enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
-            for (int j = 0; j < 56; j++)
-            {
-                if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
-                {
-                    if (enemies[i]->collision == true)
-                    {
-                        enemies[i]->speed = 4;
-                        enemies[i]->collision = false;
-                    }
-                }
-
-            }
-        }
-    }
-
 }
 
 void Game::render()
@@ -258,7 +257,7 @@ void Game::render()
         }
     }
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
         if (enemies[i]->isAlive)
         { 
