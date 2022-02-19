@@ -1,10 +1,17 @@
 #include <iostream>
+#include <string>
+#include <thread>
 
 #include "game.h"
+
+void timer(double* time, sf::Window* window);
 
 int main()
 {
     Game game;
+    double gameTime;
+
+    std::thread timerThread(timer, &gameTime, game.window);
     
     //Game Loop
     while (game.isRunning())
@@ -19,5 +26,19 @@ int main()
         game.render();
     }
 
+    timerThread.join();
+
+    std::cout << "You lived for " << game.waveCount << " waves, and " << gameTime << " seconds before dying!" << std::endl;
+
     return 0;
+}
+
+void timer(double* time, sf::Window* window)
+{
+    sf::Clock clock;
+    sf::Time gameTime;
+
+    while (window->isOpen()){}
+    gameTime = clock.getElapsedTime();
+    *time = gameTime.asSeconds();
 }

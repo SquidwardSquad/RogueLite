@@ -30,6 +30,8 @@ public:
 
 	sf::RenderWindow* window = nullptr;
 
+	int waveCount;
+
 	Game();
 	~Game();
 

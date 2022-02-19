@@ -15,7 +15,7 @@ Player::Player()
 	sprite.setTexture(texture);
 	sprite.setOrigin(sf::Vector2f(8.f, 8.f));
 	sprite.setScale(sf::Vector2f(2.f, 2.f));
-	sprite.setPosition(sf::Vector2f(400.f, 300.f));
+	sprite.setPosition(sf::Vector2f(725.f, 300.f));
 	collisionBox = sprite.getGlobalBounds();
 
 	speed = 4.f;

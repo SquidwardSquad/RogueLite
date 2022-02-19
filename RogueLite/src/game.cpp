@@ -60,6 +60,15 @@ Game::Game():
     }
 
     diffScale = 1;
+    waveCount = 1;
+
+    //Refreshes Console On StartUp
+    for (int i = 0; i < 100; i++)
+    {
+        std::cout << std::endl;
+    }
+
+    std::cout << "Starting Wave " << waveCount  << "!" << std::endl;
 }
 
 Game::~Game()
@@ -130,6 +139,9 @@ void Game::update()
                 j++;
             }
             diffScale += 0.5;
+            std::cout << "Wave " << waveCount << " complete!\n" << std::endl;
+            waveCount++;
+            std::cout << "Starting Wave " << waveCount << "!" << std::endl;
         }
     }
 
@@ -176,7 +188,7 @@ void Game::update()
             {
                 player.isAlive = false;
                 window->close();
-                std::cout << "GAME OVER!!!" << std::endl;
+                std::cout << "GAME OVER!!!\n" << std::endl;
                 
             }
         }
@@ -238,6 +250,7 @@ void Game::update()
 
 void Game::render()
 {
+
     //Clears Window
     window->clear(sf::Color(43, 29, 20));
 
@@ -266,7 +279,7 @@ void Game::render()
     }
     
     //Stop Drawing Entities
-
-    //Draws To Window
+    
+    //Displays Window
     window->display();
 }
