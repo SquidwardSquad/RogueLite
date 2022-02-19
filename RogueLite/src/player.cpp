@@ -20,6 +20,7 @@ Player::Player()
 
 	speed = 4.f;
 	isAttacking = false;
+	isAlive = true;
 
 	dir = Facing::UP;
 
@@ -60,19 +61,19 @@ void Player::move()
 		sprite.setPosition(pos + sf::Vector2f(0.f, -speed));
 		dir = Facing::UP;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(-speed, 0.f));
 		dir = Facing::LEFT;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(speed, 0.f));
 		dir = Facing::RIGHT;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(0.f, speed));

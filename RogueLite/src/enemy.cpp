@@ -25,6 +25,9 @@ Enemy::Enemy(float xPos, float yPos, double difScale)
 
 	std::srand(time(0));
 	moveType = (std::rand() % 4) + 1;
+
+	collision = false;
+	isAlive = true;
 }
 
 Enemy::~Enemy()
@@ -32,27 +35,61 @@ Enemy::~Enemy()
 }
 
 void Enemy::move()
-{
+{ 
 	switch (moveType)
 	{
 	case 1:
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(0.f, -speed));
+		dir = Facing::UP;
 		break;
 
 	case 2:
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(0.f, speed));
+		dir = Facing::DOWN;
 		break;
 
 	case 3:
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(-speed, 0.f));
+		dir = Facing::LEFT;
 		break;
 
 	case 4:
 		pos = sprite.getPosition();
 		sprite.setPosition(pos + sf::Vector2f(speed, 0.f));
+		dir = Facing::RIGHT;
+		break;
+	}
+}
+
+void Enemy::oppMove()
+{
+	switch (moveType)
+	{
+	case 1:
+		pos = sprite.getPosition();
+		sprite.setPosition(pos + sf::Vector2f(0.f, speed));
+		dir = Facing::UP;
+		break;
+
+	case 2:
+		pos = sprite.getPosition();
+		sprite.setPosition(pos + sf::Vector2f(0.f, -speed));
+		dir = Facing::DOWN;
+		break;
+
+	case 3:
+		pos = sprite.getPosition();
+		sprite.setPosition(pos + sf::Vector2f(speed, 0.f));
+		dir = Facing::LEFT;
+		break;
+
+	case 4:
+		pos = sprite.getPosition();
+		sprite.setPosition(pos + sf::Vector2f(-speed, 0.f));
+		dir = Facing::RIGHT;
 		break;
 	}
 }

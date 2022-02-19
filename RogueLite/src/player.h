@@ -11,7 +11,7 @@ class Player : public Entity
 private:
 	
 	float speed;
-	bool isAttacking;
+	
 
 	void equipWeapon();
 	void unequipWeapon();
@@ -29,6 +29,9 @@ public:
 	Facing dir;
 	
 	Weapon* weapon;
+
+	bool isAttacking;
+	bool isAlive;
 
 	Player();
 	~Player();

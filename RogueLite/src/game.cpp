@@ -9,7 +9,7 @@ Game::Game():
     //Creates Window
 	videoMode.width = 800;
 	videoMode.height = 600;
-	window = new sf::RenderWindow(videoMode, "RogueLite", sf::Style::Titlebar | sf::Style::Close);
+	window = new sf::RenderWindow(videoMode, "RoboSlayer", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 
     //Plays Music
@@ -53,9 +53,9 @@ Game::Game():
     //Temp Enemy Creation
     for (int i = 0; i < 6; i++)
     {
-        Enemy* temp = new Enemy(415, 315);
+        Enemy* temp = new Enemy(200, 200);
         enemies[i] = temp;
-        enemies[i]->collision = false;
+        
     }
 }
 
@@ -64,7 +64,10 @@ Game::~Game()
     //Deletes All Remaining Enemies
     for (int i = 0; i < 6; i++)
     {
-        delete enemies[i];
+        if (enemies[i] != nullptr)
+        { 
+            delete enemies[i];
+        }
     }
 
     //Deletes All Perimeter Walls If Closed
@@ -102,50 +105,94 @@ void Game::update()
     }
 
     //Checks If Player Collides With Walls
-	player.collisionBox = player.sprite.getGlobalBounds();
-    for (int i = 0; i < 56; i++)
+    if (player.isAlive)
     {
-        if (player.collisionBox.intersects(walls[i]->collisionBox))
+        player.collisionBox = player.sprite.getGlobalBounds();
+        for (int i = 0; i < 56; i++)
         {
-            switch (player.dir)
+            if (player.collisionBox.intersects(walls[i]->collisionBox))
             {
-            case Player::Facing::UP:
-                player.sprite.move(sf::Vector2f(0.f, 0.5f));
-                break;
+                switch (player.dir)
+                {
+                case Player::Facing::UP:
+                    player.sprite.move(sf::Vector2f(0.f, 0.5f));
+                    break;
 
-            case Player::Facing::LEFT:
-                player.sprite.move(sf::Vector2f(0.5f, 0.f));
-                break;
+                case Player::Facing::LEFT:
+                    player.sprite.move(sf::Vector2f(0.5f, 0.f));
+                    break;
 
-            case Player::Facing::RIGHT:
-                player.sprite.move(sf::Vector2f(-0.5f, 0.f));
-                break;
-           
-            case Player::Facing::DOWN:
-                player.sprite.move(sf::Vector2f(0.f, -0.5f));
-                break;
+                case Player::Facing::RIGHT:
+                    player.sprite.move(sf::Vector2f(-0.5f, 0.f));
+                    break;
+
+                case Player::Facing::DOWN:
+                    player.sprite.move(sf::Vector2f(0.f, -0.5f));
+                    break;
+                }
+                player.alterCollision(true);
             }
-            player.alterCollision(true);
+
         }
-        
     }
 
     //Checks If Enemies Collide With Walls
     for (int i = 0; i < 6; i++)
-    { 
-    enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
-        for (int j = 0; j < 56; j++)
-        {
-            if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
+    {
+        if (enemies[i]->isAlive == true)
+        { 
+            enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
+            for (int j = 0; j < 56; j++)
             {
-                enemies[i]->collision = true;
-                if (enemies[i]->collision == true)
+                if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
                 {
-                    enemies[i]->speed += -1;
+                    if (enemies[i]->collision == false)
+                    {
+                        enemies[i]->speed = -4;
+                        enemies[i]->collision = true;
+                    }
+                }
+                
+            }
+        }
+    }
+
+    //Checks If Enemies Attacked Player (Ends Game)
+    for (int i = 0; i < 6; i++)
+    {
+        if (enemies[i]->isAlive && player.isAlive)
+        {
+            enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
+            player.collisionBox = player.sprite.getGlobalBounds();
+            if (enemies[i]->collisionBox.intersects(player.collisionBox))
+            {
+                player.isAlive = false;
+                window->close();
+                std::cout << "GAME OVER!!!" << std::endl;
+                
+            }
+        }
+    }
+
+    //Checks If Enemies Get Hit
+    if (player.isAttacking)
+    { 
+        for (int i = 0; i < 6; i++)
+        {
+            if (enemies[i]->isAlive)
+            {
+                enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
+                for (int j = 0; j < 56; j++)
+                {
+                    if (enemies[i]->collisionBox.intersects(player.weapon->collisionBox))
+                    {
+                        enemies[i]->isAlive = false;
+                    }
                 }
             }
         }
     }
+
 
     //Also Checks If Player Is Attacking
     player.attack();
@@ -157,10 +204,35 @@ void Game::update()
     }
     player.alterCollision(false);
 
+
+    //Moves Enemy
     for (int i = 0; i < 6; i++)
     {
-        enemies[i]->move();
-        enemies[i]->collision = false;
+        if (enemies[i]->collision == false)
+            enemies[i]->move();
+        else
+            enemies[i]->oppMove();
+    }
+
+    //Checks If Enemies Collide With Walls
+    for (int i = 0; i < 6; i++)
+    {
+        if (enemies[i]->isAlive == true)
+        {
+            enemies[i]->collisionBox = enemies[i]->sprite.getGlobalBounds();
+            for (int j = 0; j < 56; j++)
+            {
+                if (enemies[i]->collisionBox.intersects(walls[j]->collisionBox))
+                {
+                    if (enemies[i]->collision == true)
+                    {
+                        enemies[i]->speed = 4;
+                        enemies[i]->collision = false;
+                    }
+                }
+
+            }
+        }
     }
 
 }
@@ -168,7 +240,7 @@ void Game::update()
 void Game::render()
 {
     //Clears Window
-    window->clear(sf::Color(6, 54, 17));
+    window->clear(sf::Color(43, 29, 20));
 
     //Drawing Entities
 	
@@ -177,15 +249,21 @@ void Game::render()
         window->draw(walls[i]->sprite);
     }
 
-    window->draw(player.sprite);
-    if (player.checkIfAttacking())
-    {
-        window->draw(player.weapon->sprite);
+    if (player.isAlive)
+        { 
+        window->draw(player.sprite);
+        if (player.checkIfAttacking())
+        {
+            window->draw(player.weapon->sprite);
+        }
     }
 
     for (int i = 0; i < 6; i++)
     {
-        window->draw(enemies[i]->sprite);
+        if (enemies[i]->isAlive)
+        { 
+            window->draw(enemies[i]->sprite);
+        }
     }
     
     //Stop Drawing Entities

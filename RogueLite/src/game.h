@@ -16,7 +16,7 @@ class Game
 private:
 
 	sf::VideoMode videoMode;
-	sf::RenderWindow* window = nullptr;
+	
 	sf::Event event;
 	sf::Music music;
 
@@ -25,6 +25,8 @@ private:
 	Enemy* enemies[6];
 	
 public:
+
+	sf::RenderWindow* window = nullptr;
 
 	Game();
 	~Game();
