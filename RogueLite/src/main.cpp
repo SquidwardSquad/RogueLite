@@ -28,7 +28,10 @@ int main()
 
     timerThread.join();
 
-    std::cout << "You lived for " << game.waveCount << " waves, and " << gameTime << " seconds before dying!" << std::endl;
+    std::cout << "You lived for " << game.waveCount << " waves, and " << gameTime << " seconds before dying!\n" << std::endl;
+
+    std::cout << "Press ENTER to close this window...";
+    std::cin.get();
 
     return 0;
 }
